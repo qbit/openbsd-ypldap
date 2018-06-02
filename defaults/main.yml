@@ -1,0 +1,23 @@
+---
+
+ldap_server: 127.0.0.1
+ypldap_interval: 60
+ldaps: True
+ldap_domain: bolddaemon
+ldap_tld: com
+ldap_fqdn: "{{ ldap_domain }}.{{ ldap_tld }}"
+ldap_admin: admin
+ldap_admin_pass: "welcome"
+
+ldap_attr_map: [
+	{ attr: "name", attr_to: "uid" },
+	{ attr: "uid", attr_to: "uidNumber" },
+	{ attr: "gid", attr_to: "gidNumber" },
+	{ attr: "gecos", attr_to: "cn" },
+	{ attr: "home", attr_to: "homeDirectory" },
+	{ attr: "shell", attr_to: "loginShell" },
+	{ attr: "class", attr_to: "userClass" },
+	{ attr: "passwd", attr_to: "shadowPassword" },
+	{ attr: "change", attr_to: "modifyTimestamp" },
+	{ attr: "expire", attr_to: "shadowExpire" },
+]

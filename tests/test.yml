@@ -1,0 +1,5 @@
+---
+- hosts: testhosts
+  remote_user: root
+  roles:
+    - openbsd-ypldap

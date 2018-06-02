@@ -1,0 +1,47 @@
+# $OpenBSD: ypldap.conf,v 1.1 2014/07/11 21:20:10 deraadt Exp $
+#
+# {{ ansible_managed }}
+#
+
+domain		"{{ ldap_fqdn }}"
+interval	{{ ypldap_interval }}
+provide map	"passwd.byname"
+provide map	"passwd.byuid"
+provide map	"group.byname"
+provide map	"group.bygid"
+provide map	"netid.byname"
+
+{% if ldaps %}
+{% if cafile is defined %}
+cafile		"{{ cafile }}"
+{% endif %}
+directory "{{ ldap_server }}" ldaps {
+{% else %}
+directory "{{ ldap_server }}" {
+{% endif %}
+	# directory options
+	binddn "cn={{ ldap_admin }},dc={{ ldap_domain }},dc={{ ldap_tld }}"
+	bindcred "{{ ldap_admin_pass }}"
+	basedn "dc={{ ldap_domain }},dc={{ ldap_tld }}"
+	# starting point for groups directory search, default to basedn
+	groupdn "ou=Groups,dc={{ ldap_domain }},dc={{ ldap_tld }}"
+
+	# passwd maps configuration (RFC 2307 posixAccount object class)
+	passwd filter "(objectClass=posixAccount)"
+
+{% for item in ldap_attr_map %}
+	attribute {{ item.attr }} maps to "{{ item.attr_to }}"
+{% endfor %}
+	fixed attribute change "0"
+	fixed attribute expire "0"
+	fixed attribute class "default"
+
+	# group maps configuration (RFC 2307 posixGroup object class)
+	group filter "(objectClass=posixGroup)"
+
+	attribute groupname maps to "cn"
+	fixed attribute grouppasswd "*"
+	attribute groupgid maps to "gidNumber"
+	# memberUid returns multiple group members
+	list groupmembers maps to "memberUid"
+}

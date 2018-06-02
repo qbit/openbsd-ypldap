@@ -1,0 +1,51 @@
+---
+
+- name: Set defaultdomain
+  copy:
+    content: "{{ ldap_fqdn }}\n"
+    dest: /etc/defaultdomain
+
+- name: Run domainname
+  shell: domainname $(cat /etc/defaultdomain)
+
+  #- name: Set myname
+  #  copy:
+  #    content: "{{ ansible_hostname }}.{{ ldap_fqdn }}\n"
+  #    dest: /etc/myname
+
+- name: Add YP master.passwd marker 
+  lineinfile:
+    dest: /etc/master.passwd
+    line: "+:*::::::::"
+    insertafter: EOF
+  register: passwd
+
+- name: Add YP group marker
+  lineinfile:
+    dest: /etc/group
+    line: "+:*::"
+    insertafter: EOF
+
+- name: Run pwd_mkdb
+  command: pwd_mkdb -p /etc/master.passwd
+  when: passwd.changed
+
+- name: Setup ypldap
+  template:
+    src: ypldap.conf.j2
+    dest: /etc/ypldap.conf
+    mode: 0600
+    owner: root
+    group: wheel
+    validate: /usr/sbin/ypldap -n -f %s
+    #notify: restart ypldap
+
+- name: Start and enable services
+  service:
+    name: "{{ item }}"
+    state: started
+    enabled: true
+  with_items:
+    - portmap
+    - ypldap
+    - ypbind
