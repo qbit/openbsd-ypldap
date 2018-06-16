@@ -38,7 +38,7 @@
     owner: root
     group: wheel
     validate: /usr/sbin/ypldap -n -f %s
-    #notify: restart ypldap
+  notify: restart ypldap
 
 - name: Start and enable services
   service:
