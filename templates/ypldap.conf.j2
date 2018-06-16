@@ -20,8 +20,8 @@ directory "{{ ldap_server }}" ldaps {
 directory "{{ ldap_server }}" {
 {% endif %}
 	# directory options
-	binddn "cn={{ ldap_admin }},dc={{ ldap_domain }},dc={{ ldap_tld }}"
-	bindcred "{{ ldap_admin_pass }}"
+	binddn "cn={{ ldap_read }},dc={{ ldap_domain }},dc={{ ldap_tld }}"
+	bindcred "{{ ldap_read_pw }}"
 	basedn "dc={{ ldap_domain }},dc={{ ldap_tld }}"
 	# starting point for groups directory search, default to basedn
 	groupdn "ou=Groups,dc={{ ldap_domain }},dc={{ ldap_tld }}"

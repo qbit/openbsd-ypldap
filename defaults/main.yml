@@ -9,6 +9,9 @@ ldap_fqdn: "{{ ldap_domain }}.{{ ldap_tld }}"
 ldap_admin: admin
 ldap_admin_pass: "welcome"
 
+ldap_read: read
+ldap_read_pw: "welcome"
+
 ldap_attr_map: [
 	{ attr: "name", attr_to: "uid" },
 	{ attr: "uid", attr_to: "uidNumber" },
