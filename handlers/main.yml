@@ -1,2 +1,6 @@
 ---
-# handlers file for openbsd-ypldap
+
+- name: restart ypldap
+  service:
+    name: ypldap
+    state: restarted
