@@ -8,6 +8,7 @@ ldap_tld: com
 ldap_fqdn: "{{ ldap_domain }}.{{ ldap_tld }}"
 ldap_admin: admin
 ldap_admin_pass: "welcome"
+ldap_default_class: default
 
 ldap_read: read
 ldap_read_pw: "welcome"

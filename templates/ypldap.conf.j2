@@ -34,7 +34,7 @@ directory "{{ ldap_server }}" {
 {% endfor %}
 	fixed attribute change "0"
 	fixed attribute expire "0"
-	fixed attribute class "default"
+	fixed attribute class "{{ ldap_default_class }}"
 
 	# group maps configuration (RFC 2307 posixGroup object class)
 	group filter "(objectClass=posixGroup)"
